@@ -1,5 +1,5 @@
 import { parseOrderInput } from "@/lib/orders/validation";
-import { getSheetsOrderWriter } from "@/lib/sheets";
+import { GOOGLE_SHEETS_ORDER_APPEND_RANGE, getSheetsOrderWriter } from "@/lib/sheets";
 
 export const runtime = "nodejs";
 
@@ -22,13 +22,34 @@ export async function POST(request: Request) {
   }
 
   try {
-    await getSheetsOrderWriter().appendOrder(order);
+    const sheetsResult = await getSheetsOrderWriter().appendOrder(order);
+
+    console.info("[orders.submit.sheets.success]", {
+      serviceDate: order.serviceDate,
+      loadingTime: order.loadingTime,
+      origin: order.origin,
+      destination: order.destination,
+      serviceType: order.serviceType,
+      cargoTons: order.cargoTons,
+      appendRange: GOOGLE_SHEETS_ORDER_APPEND_RANGE,
+      sheets: sheetsResult,
+    });
 
     return Response.json({ ok: true });
   } catch (error) {
     const message =
       error instanceof Error ? error.message : "Unknown Google Sheets error";
     const isConfigError = message.includes("GOOGLE_");
+
+    console.error("[orders.submit.sheets.error]", {
+      serviceDate: order.serviceDate,
+      loadingTime: order.loadingTime,
+      origin: order.origin,
+      destination: order.destination,
+      serviceType: order.serviceType,
+      cargoTons: order.cargoTons,
+      error: message,
+    });
 
     return Response.json(
       {

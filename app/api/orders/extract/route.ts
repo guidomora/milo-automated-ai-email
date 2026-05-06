@@ -27,14 +27,33 @@ export async function POST(request: Request) {
   }
 
   try {
+    const message = body.message.trim();
     const extraction = await getAiProvider().extractOrderFields({
-      message: body.message.trim(),
+      message,
+    });
+
+    console.info("[orders.extract.success]", {
+      messageLength: message.length,
+      extraction: {
+        serviceDate: extraction.serviceDate,
+        loadingTime: extraction.loadingTime,
+        origin: extraction.origin,
+        destination: extraction.destination,
+        serviceType: extraction.serviceType,
+        cargoTons: extraction.cargoTons,
+      },
+      missingFields: extraction.missingFields,
     });
 
     return Response.json({ extraction });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown AI error";
     const isConfigError = message.includes("AI_KEY");
+
+    console.error("[orders.extract.error]", {
+      messageLength: body.message.trim().length,
+      error: message,
+    });
 
     return Response.json(
       {

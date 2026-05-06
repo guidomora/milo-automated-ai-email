@@ -20,7 +20,7 @@ A partir del mensaje del usuario, extrae estos campos:
 - loadingTime: horario de carga en formato 24 hs HH:mm
 - origin: origen del servicio
 - destination: destino del servicio
-- serviceType: tipo de servicio
+- serviceType: tipo de servicio como texto libre
 - cargoTons: cantidad de toneladas como numero
 - detail: detalle adicional opcional como texto breve
 
@@ -30,6 +30,7 @@ Reglas:
 - Normaliza fechas al formato dd/mm/aaaa.
 - Normaliza horarios al formato HH:mm.
 - Si el usuario dice "hoy", "manana" u otra fecha relativa, usa la fecha actual provista.
+- No limites serviceType a opciones predefinidas: conserva el tipo de servicio mencionado por el usuario como texto breve.
 - Si el tipo de servicio no esta claro, usa null.
 - detail es opcional: si no hay informacion adicional, usa null y no lo incluyas en missingFields.
 - missingFields debe incluir todos los campos requeridos que sean null.

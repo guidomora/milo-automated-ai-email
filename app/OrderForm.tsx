@@ -6,14 +6,6 @@ import { shouldAutoExtractMessage } from "@/lib/orders/auto-extraction";
 
 const AUTO_EXTRACTION_DELAY_MS = 4000;
 
-const serviceTypes = [
-  "Transporte terrestre",
-  "Carga consolidada",
-  "Retiro y entrega",
-  "Distribucion local",
-  "Servicio especial",
-];
-
 type OrderFormState = {
   serviceType: string;
   serviceDate: string;
@@ -392,22 +384,15 @@ export default function OrderForm() {
           <span className="text-sm font-medium text-[#223128]">
             Tipo de servicio
           </span>
-          <select
+          <input
             name="serviceType"
+            type="text"
             required
+            placeholder="Ej. Descarga"
             value={formValues.serviceType}
             onChange={(event) => updateField("serviceType", event.target.value)}
-            className="h-12 rounded-md border border-[#cbd8cf] bg-white px-3 text-base text-[#17211b] outline-none transition focus:border-[#2f7651] focus:ring-4 focus:ring-[#2f7651]/15"
-          >
-            <option value="" disabled>
-              Selecciona una opcion
-            </option>
-            {serviceTypes.map((serviceType) => (
-              <option key={serviceType} value={serviceType}>
-                {serviceType}
-              </option>
-            ))}
-          </select>
+            className="h-12 rounded-md border border-[#cbd8cf] bg-white px-3 text-base text-[#17211b] outline-none transition placeholder:text-[#8a978f] focus:border-[#2f7651] focus:ring-4 focus:ring-[#2f7651]/15"
+          />
         </label>
 
         <label className="flex flex-col gap-2">
